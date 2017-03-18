@@ -53,9 +53,9 @@ int oldirtycow(){
     int iFi;
     iFi=0;
     //this parses the files left / right so we can compare
-    while (fgets(line, sizeof(line), file)) { /* fgets returns a null that can be useful */
+    while (fgets(line, sizeof(line), file)) { /* fgets returns a NULL that can be useful */
         fileArgsLeft[iFi] = strtok(line, " "); /* return the characters up to the first space */
-        fileArgsRight[iFi] = strtok(strtok(NULL, " "), "\n"); /* using newline character -- not handling null */
+        fileArgsRight[iFi] = strtok(strtok(NULL, " "), "\n"); /* using newline character -- not handling NULL */
 	FILE* fpLeft = fopen(fileArgsLeft[iFi], "rb");
 	FILE* fpRight = fopen(fileArgsRight[iFi], "rb");
 		//Test to make sure we are always working with valid file pointers
