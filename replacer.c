@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
+#include<errno.h>
 #include<android/log.h>
 #include<sys/system_properties.h>
 
