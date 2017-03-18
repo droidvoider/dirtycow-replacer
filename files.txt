@@ -1,0 +1,4 @@
+/data/local/tmp/replace/beingpatched1 /data/local/tmp/replacewith/patchingwith1
+/data/local/tmp/replace/beingpatched2 /data/local/tmp/replacewith/patchingwith2
+/data/local/tmp/replace/beingpatched3 /data/local/tmp/replacewith/patchingwith3
+/data/local/tmp/replace/beingpatched4 /data/local/tmp/replacewith/patchingwith4
