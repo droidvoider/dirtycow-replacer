@@ -1,4 +1,4 @@
-/* Notice: No error testing is performed on this EXTREMELY dangerous rooting tool */
+/* Notice: Not much error testing is performed on this EXTREMELY dangerous rooting tool */
 #include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
@@ -14,17 +14,14 @@
 #define LOGV(...)
 #endif
 
-//user definited type named bool which enumerates between true/false.
-typedef enum { false, true } bool;
-
 
 // This "function declaration" is from dirtycow.c which is included during compile inside Android.mk, check for reference
 int dcow(const char *dst, const char *src);
 
 //local function declarations
 FILE* fopen_path(const char *path, const char *style);
-bool files_matched(FILE* fp1, FILE* fp2); 
-bool oldirtycow(); 
+int files_matched(FILE* fp1, FILE* fp2); 
+int oldirtycow(); 
 char * recover_filename(FILE * f);
 
 //execution starts here
@@ -34,7 +31,7 @@ int main(int argc, const char *argv[]) {
         LOGV("dirty-replacer beginning execution");
 
 	//checking is done inside the cow
-        if (!oldirtycow()){
+        if (oldirtycow()){
 	   printf("Error in dirtycow\n");
         LOGV("the check --> if (olddirtycow()) returned an error.");
 	}else{
@@ -44,12 +41,12 @@ int main(int argc, const char *argv[]) {
 
 	return 0;
 }
-bool oldirtycow(){
+int oldirtycow(){
     //open our file list read only
     FILE* file = fopen("files.txt", "r"); /* should check the result */
     //This is an array of characters it is not a pointer.
     char line[2048];
-    //These are pointers to arrays of characters. each # is a character array itself..
+    //holds files parts from files.txt
     char *fileArgsLeft[1024];
     char *fileArgsRight[1024];
     //Keeps track of While Loop iteration #, so we can point to the correct array
@@ -74,7 +71,7 @@ bool oldirtycow(){
 			        fclose(fpRight);
 			if(file != NULL)
 				fclose(file);
-			return false;
+			return 1;
 		}
 		//Test to make sure we are always working with valid file pointers
 		if(fpRight == NULL){
@@ -90,10 +87,10 @@ bool oldirtycow(){
 			        fclose(fpRight);
 			if(file != NULL)
 				fclose(file);
-			return false;
+			return 1;
 		}
 
-	if(!files_matched(fpLeft,fpRight)){
+	if(files_matched(fpLeft,fpRight)){
         //mo00om - let's try some cow, yeah?
 	printf("Dirtycow replacing: %s with: %s\n",fileArgsLeft[iFi], fileArgsRight[iFi]);
 	if (dcow(fileArgsLeft[iFi], fileArgsRight[iFi])){
@@ -107,7 +104,7 @@ bool oldirtycow(){
 			        fclose(fpRight);
 			if(file != NULL)
 				fclose(file);
-			return false;
+			return 1;
 	}
 	else{
 		printf("Successfully (PATHCHED)\nleft: %s\n(PATHCED WITH)\nright: %s\n",fileArgsLeft[iFi], fileArgsRight[iFi]);
@@ -121,12 +118,12 @@ bool oldirtycow(){
 			if(file != NULL)
 				fclose(file);
 
-	return true;
+	return 0;
 }
 
-bool files_matched(FILE* fp1, FILE* fp2){
+int files_matched(FILE* fp1, FILE* fp2){
    int ch1, ch2;
-   bool isMatch;
+   int isMatch;
   
       ch1 = getc(fp1);
       ch2 = getc(fp2);
@@ -135,11 +132,11 @@ bool files_matched(FILE* fp1, FILE* fp2){
          ch2 = getc(fp2);
       }
       if (ch1 == ch2){
-	 isMatch=true;
+	 isMatch=0;
          LOGV("Files are identical %s unchanged\n",recover_filename(fp1));
       }
       else if (ch1 != ch2){
-	 isMatch=false;
+	 isMatch=1;
          printf("Files NOT identical, calling the cow!\n");
       }
  
@@ -148,7 +145,7 @@ bool files_matched(FILE* fp1, FILE* fp2){
 return isMatch;
 }
 
-// open a given path, mounting partitions as necessary
+// open a given path
 FILE* fopen_path(const char *path, const char *style) {
 	FILE *fp = fopen(path, style);
 	if (fp == NULL) {
