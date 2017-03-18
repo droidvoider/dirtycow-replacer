@@ -1,6 +1,4 @@
-**PLEASE NOTICE I AM NOT TESTING THIS CODE ANYWHERE EVER! IT IS BEING DESIGNED AS AN EDUCATIONAL TOOL**
-**PLEASE NOTICE I AM NOT TESTING THIS CODE ANYWHERE EVER! IT IS BEING DESIGNED AS AN EDUCATIONAL TOOL**
-**PLEASE NOTICE I AM NOT TESTING THIS CODE ANYWHERE EVER! IT IS BEING DESIGNED AS AN EDUCATIONAL TOOL**
+**PLEASE NOTICE I AM NOT FORMALLY TESTING THIS CODE** IT IS BEING DESIGNED AS AN EDUCATIONAL TOOL
 
 **What's it do?**
 android-dirtycow-replacer uses the CVE-2016-5195 dirtycow exploit to patch a list of over 1000 files.
@@ -33,15 +31,19 @@ beingpatched# text == unpatched001 --- unpatched004
 The files in replacedwith/ contain text patchingdon1 through patchingdon4
 When you type 'make push' it will compile and these directories, files.txt and replacer will be pushed to
 /data/local/tmp/
-..still with me?, imagine writing it
+..still with me?,
 **Actual Directions for Example**
 Unzip to a folder, right click and open two terminals in this folder
 ......tip: if you click one terminal window and then the other both terminal windows remain visible
+
 In one terminal window type: make log
-In the next terminal window type:
-make push  <===No errors right? don't proceed on errors
+
+In the next terminal window type: make push  <===No errors right?
+
 adb shell
+then
 cd data/local/tmp
+then
 ./replacer
 
 **Overview of main project -- Not this project**
